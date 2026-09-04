@@ -1,21 +1,22 @@
-const STATUS_CONFIG = {
-  checking: { label: 'Mengecek...', classes: 'bg-gray-100 text-gray-600 border-gray-300' },
-  ok: { label: 'Backend Aktif', classes: 'bg-green-100 text-green-700 border-green-300' },
-  error: { label: 'Backend Gak Kedetek', classes: 'bg-red-100 text-red-700 border-red-300' },
+import { useHealthCheck } from '../hooks/useHealthCheck';
+
+const STATUS_STYLES = {
+  checking: { label: 'Memeriksa server...', dot: 'bg-bp-muted', text: 'text-bp-muted' },
+  up: { label: 'Server aktif', dot: 'bg-bp-pinkBright', text: 'text-bp-pink' },
+  down: { label: 'Server tidak dapat dijangkau', dot: 'bg-red-500', text: 'text-red-400' },
 };
 
-/**
- * Komponen berbasis data: tampilannya 100% ditentukan dari prop `status`,
- * gak ada logic khusus per pemanggilan.
- */
-function HealthBadge({ status }) {
-  const { label, classes } = STATUS_CONFIG[status] || STATUS_CONFIG.checking;
+export default function HealthBadge() {
+  const status = useHealthCheck();
+  const style = STATUS_STYLES[status] || STATUS_STYLES.checking;
 
   return (
-    <span className={`inline-block px-3 py-1 text-sm font-semibold rounded-full border ${classes}`}>
-      {label}
+    <span
+      className={`inline-flex items-center gap-1.5 rounded-full border border-bp-border bg-bp-card px-2.5 py-1 text-xs font-medium ${style.text}`}
+      title="Status koneksi ke backend"
+    >
+      <span className={`h-1.5 w-1.5 rounded-full ${style.dot}`} />
+      {style.label}
     </span>
   );
 }
-
-export default HealthBadge;
