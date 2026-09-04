@@ -1,17 +1,12 @@
 import { Routes, Route } from 'react-router-dom';
 import Home from '../pages/Home';
+import Admin from '../pages/Admin';
 
-/**
- * Semua route halaman didaftarin di sini. App.jsx cuma manggil
- * <AppRoutes /> ini, gak perlu tau detail path apa aja yang ada -
- * kalo nambah halaman baru, cukup import + tambah <Route> di sini.
- */
-function AppRoutes() {
+export default function AppRoutes() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="/admin/*" element={<Admin />} />
     </Routes>
   );
 }
-
-export default AppRoutes;

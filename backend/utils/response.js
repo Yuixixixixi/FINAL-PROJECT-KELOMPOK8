@@ -1,10 +1,21 @@
-/**
- * Format response seragam buat semua endpoint: { code, success, message, data }.
- * Dipake di semua controller biar frontend selalu tau bentuk responsnya
- * kayak apa, gak beda-beda tiap endpoint.
- */
-function sendResponse(res, { code = 200, success = true, message = '', data = null }) {
-  return res.status(code).json({ code, success, message, data });
+function ok(res, data, message = 'OK', status = 200) {
+  return res.status(status).json({ success: true, message, data });
 }
 
-module.exports = sendResponse;
+function created(res, data, message = 'Berhasil dibuat') {
+  return ok(res, data, message, 201);
+}
+
+function fail(res, message = 'Terjadi kesalahan', status = 400, errors = null) {
+  return res.status(status).json({ success: false, message, errors });
+}
+
+function notFound(res, message = 'Data tidak ditemukan') {
+  return fail(res, message, 404);
+}
+
+function unauthorized(res, message = 'Tidak diotorisasi') {
+  return fail(res, message, 401);
+}
+
+module.exports = { ok, created, fail, notFound, unauthorized };

@@ -1,13 +1,11 @@
-const sendResponse = require('../utils/response');
+const { ok } = require('../utils/response');
 
 function getHealth(req, res) {
-  return sendResponse(res, {
-    message: 'Backend jalan normal',
-    data: {
-      status: 'ok',
-      timestamp: new Date().toISOString(),
-    },
-  });
+  return ok(res, {
+    status: 'up',
+    service: 'ppdb-chatbot-backend',
+    timestamp: new Date().toISOString(),
+  }, 'Server sehat');
 }
 
 module.exports = { getHealth };

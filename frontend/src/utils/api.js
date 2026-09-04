@@ -1,15 +1,31 @@
-const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+import axios from 'axios';
 
-/**
- * Wrapper kecil buat GET request ke backend, biar gak nulis ulang
- * fetch() + error handling di tiap komponen/hook yang butuh data.
- */
-export async function apiGet(path) {
-  const res = await fetch(`${BASE_URL}${path}`);
+const baseURL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000/api';
 
-  if (!res.ok) {
-    throw new Error(`Request gagal: ${res.status} ${res.statusText}`);
+const api = axios.create({ baseURL });
+
+// Sisipkan token JWT panitia (jika ada) ke setiap request
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('ppdb_admin_token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
   }
+  return config;
+});
 
-  return res.json();
-}
+// Jika token kedaluwarsa/invalid, bersihkan sesi lokal
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error?.response?.status === 401 && localStorage.getItem('ppdb_admin_token')) {
+      localStorage.removeItem('ppdb_admin_token');
+      localStorage.removeItem('ppdb_admin_profile');
+      if (!window.location.pathname.includes('/admin/login')) {
+        window.location.href = '/admin/login';
+      }
+    }
+    return Promise.reject(error);
+  }
+);
+
+export default api;
