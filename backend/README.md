@@ -1,4 +1,4 @@
-Backend — Chatbot PPDB SMK Al-Bahri Bekasi
+# Backend — Chatbot PPDB SMK Al-Bahri Bekasi
 REST API untuk chatbot layanan informasi PPDB SMK Al-Bahri Bekasi. Dibangun dengan Express + SQLite (better-sqlite3) + JWT, dengan mesin pencocokan pertanyaan TF-IDF + Cosine Similarity yang ditulis native JavaScript (tanpa library ML).
 
 1. Teknologi
